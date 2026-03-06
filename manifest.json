@@ -1,0 +1,83 @@
+{
+  "name": "stackexchange",
+  "version": "1.0",
+  "description": "Search Stack Overflow and 170+ Stack Exchange sites for Q&A on programming, sysadmin, science, and more. No API key required.",
+  "documentation": "Searches Stack Exchange sites (Stack Overflow, Server Fault, Super User, Ask Ubuntu, and 170+ others) for questions and answers. Use for programming questions, debugging, how-to guides, sysadmin tasks, and best practices. Common triggers: 'how do I...', 'why does X error occur', 'best way to...', 'difference between X and Y'. Specify a site to target a domain (e.g., site='serverfault' for sysadmin, site='askubuntu' for Ubuntu-specific). Set has_accepted=true to filter for questions with accepted answers for high-quality results. Returns question scores, answer counts, tags, and top answer excerpts. Pair with web_read to fetch full answer content from the result URL.",
+  "category": "research",
+  "icon": "fa-brands fa-stack-overflow",
+  "trigger": {
+    "type": "on_demand",
+    "description": "Initiated by Chalie when programming or technical Q&A is needed"
+  },
+
+  "parameters": {
+    "query": {
+      "type": "string",
+      "required": true,
+      "description": "Search query (e.g., 'python async await difference', 'nginx reverse proxy config')"
+    },
+    "site": {
+      "type": "string",
+      "required": false,
+      "default": "stackoverflow",
+      "description": "Stack Exchange site to search (e.g., 'stackoverflow', 'serverfault', 'superuser', 'askubuntu', 'unix'). Defaults to stackoverflow."
+    },
+    "limit": {
+      "type": "integer",
+      "required": false,
+      "default": 5,
+      "description": "Number of results to return (1-8). Capped at 8."
+    },
+    "sort": {
+      "type": "string",
+      "required": false,
+      "default": "relevance",
+      "description": "Sort order: 'relevance' (default), 'votes', 'activity', 'creation'."
+    },
+    "has_accepted": {
+      "type": "boolean",
+      "required": false,
+      "description": "Filter to questions with accepted answers only. Good for authoritative results."
+    }
+  },
+
+  "returns": {
+    "results": {
+      "type": "array",
+      "description": "List of {title, url, score, answer_count, accepted_answer_id, tags, top_answer_body, view_count, creation_date}"
+    },
+    "count": {
+      "type": "integer",
+      "description": "Number of results returned"
+    },
+    "_meta": {
+      "type": "object",
+      "description": "Observability: fetch_latency_ms, site, quota_remaining, has_accepted_filter, result_count"
+    }
+  },
+
+  "constraints": {
+    "timeout_seconds": 12
+  },
+
+  "config_schema": {},
+
+  "tips": [
+    "Use site='serverfault' for server/infrastructure questions, 'superuser' for OS questions",
+    "Set has_accepted=true for guaranteed authoritative answers",
+    "sort='votes' surfaces the most community-validated answers",
+    "Pair with web_read to fetch complete answer content from the result URL",
+    "The quota_remaining field in _meta shows remaining API calls (300/day without key)"
+  ],
+
+  "output": {
+    "synthesize": true,
+    "card": {
+      "enabled": true,
+      "mode": "immediate",
+      "title": "Stack Exchange",
+      "accent_color": "#F48024",
+      "background_color": "rgba(244,128,36,0.06)"
+    }
+  }
+}
